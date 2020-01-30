@@ -4,6 +4,7 @@ const seats = document.querySelectorAll('.row .seat:not(.occupied)');
 const count = document.getElementById('count');
 const total = document.getElementById('total');
 const movieSelect = document.getElementById('movie');
+const clearBtn = document.getElementById('clearBtn');
 
 let ticketPrice = +movieSelect.value;
 
@@ -24,6 +25,14 @@ const updateSelectedCount = () => {
 
     count.innerText = selectedSeatsCount;
     total.innerText = selectedSeatsCount * ticketPrice;
+}
+
+// Reset booking
+const resetBooking = () => {
+    const selectedSeats = document.querySelectorAll('.row .seat.selected');
+    [...selectedSeats].forEach(seat => seat.classList.toggle('selected'));
+    localStorage.clear();
+    updateSelectedCount();
 }
 
 // Get data from localStorage and populate UI
@@ -49,7 +58,7 @@ const populateUI = () => {
 movieSelect.addEventListener('change', e => {
     ticketPrice = +e.target.value;
     setMovieData(e.target.selectedIndex, e.target.value);
-    updateSelectedCount();
+    resetBooking();
 });
 
 // Seat click event
@@ -62,6 +71,9 @@ seatContainer.addEventListener('click', e => {
         updateSelectedCount();
     }
 });
+
+// Clear all selected seats
+clearBtn.addEventListener('click', resetBooking);
 
 populateUI();
 
